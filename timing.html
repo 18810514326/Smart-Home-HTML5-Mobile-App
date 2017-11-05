@@ -1,0 +1,77 @@
+<!DOCTYPE html>
+<html>
+
+	<head>
+		<meta charset="utf-8">
+		<title>Hello MUI</title>
+		<meta name="viewport" content="width=device-width, initial-scale=1,maximum-scale=1,user-scalable=no">
+		<meta name="apple-mobile-web-app-capable" content="yes">
+		<meta name="apple-mobile-web-app-status-bar-style" content="black">
+
+		<!--标准mui.css-->
+		<link rel="stylesheet" href="./css/mui.min.css">
+		<script src="./js/mui.min.js"></script>
+	</head>
+
+	<body>
+		<header class="mui-bar mui-bar-nav">
+			<a class="mui-action-back mui-icon mui-icon-left-nav mui-pull-left"></a>
+			<h1 class="mui-title">Delay</h1>
+		</header>
+		<div class="mui-content">
+			<h5 class="mui-content-padded">Delay time</h5>
+			<ul class="mui-table-view mui-table-view-radio">
+				<li class="mui-table-view-cell">
+					<a class="mui-navigate-right">
+						15 minutes
+					</a>
+				</li>
+				<li class="mui-table-view-cell">
+					<a class="mui-navigate-right">
+						30 minutes
+					</a>
+				</li>
+				<li class="mui-table-view-cell">
+					<a class="mui-navigate-right">
+						45 minutes
+					</a>
+				</li>
+				<li class="mui-table-view-cell">
+					<a class="mui-navigate-right">
+						60 minutes
+					</a>
+				</li>
+				<li class="mui-table-view-cell">
+					<a class="mui-navigate-right">
+						90 minutes
+					</a>
+				</li>
+			</ul>
+			<div class="mui-content-padded">
+				<p id="info"></p>
+			</div>
+		</div>
+	<a href="lamp.html">
+	<button style="width:80%;margin-left:33px;margin-top:150px;color:dodgerblue">Confirm</button>	
+	</a>
+</body>
+<script>
+		mui.init({
+			swipeBack:true //启用右滑关闭功能
+		});
+		var info = document.getElementById("info");
+		document.querySelector('.mui-table-view.mui-table-view-radio').addEventListener('selected',function(e){
+			info.innerHTML = "Turn off the light in "+e.detail.el.innerText;	
+		});
+		
+		function SendPage(pageId, linkUrl, pageParam) {  
+                mui.openWindow({//目标页面  
+                    url: 'lamp.html',  
+                    id: 'lamp.html',  
+                    extras: {
+                    	t:'15m'
+                    }
+                });  
+            } 
+</script>
+</html>

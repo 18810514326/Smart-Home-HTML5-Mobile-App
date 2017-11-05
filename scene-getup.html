@@ -1,0 +1,240 @@
+<!DOCTYPE html>
+<html>
+	<head>
+		<meta charset="utf-8">
+		<meta name="viewport" content="width=device-width,initial-scale=1,minimum-scale=1,maximum-scale=1,user-scalable=no" />
+		<title></title>
+		<link href="css/mui.min.css" rel="stylesheet" />
+		<link rel="stylesheet" href="./css/bootstrap.min.css">
+		<script src="https://cdn.bootcss.com/progressbar.js/1.0.1/progressbar.js"></script>
+		<script src="./js/jquery-3.2.1.min.js"></script>
+		<script src="./js/mui.min.js"></script>
+		<script src="./js/bootstrap.min.js"></script>
+		<script src="cordova.js" type="text/javascript"></script>
+		<script>
+            function onBodyLoad() {
+                document.addEventListener("deviceready", onDeviceReady, false);
+                document.addEventListener("resume", callbackFunction, false);
+            }
+
+             function callbackFunction() {
+                stopAudio();
+            }
+
+            function onDeviceReady() {
+              $(function(){
+                var Hour = localStorage.getItem("Hour");
+                var Minute = localStorage.getItem("Minute");
+                infoh.innerHTML=Hour;
+                infom.innerHTML=Minute;
+        
+                var d1 =new Date();
+                var now = d1.getTime();
+                if(Hour>d1.getHours()){
+                  d2 = (60 - d1.getMinutes())*60000 + (Hour-d1.getHours()-1)*60*60000 + Minute*60000;
+                //  alert(d2);
+                }
+                else if(Hour=d1.getHours()&&Minute>d1.getMinutes()){
+                  d2 = (Minute-d1.getMinutes())*60000;
+                //  alert(d2);
+                }
+                else{
+                  d2 = (60-d1.getMinutes())*60000 + (23-d1.getHours())*60*60000 + Hour*60*60000 + Minute*60000;
+                //  alert(d2);
+                }
+              
+                myVar=setTimeout(playAudio,d2);
+              //myVar1=setTimeout(onSocket,d2);
+              //myVar2=setTimeout(openCurtain,d2);
+
+              cordova.plugins.notification.local.schedule({  
+                id: 1,  
+                title: 'Alarm clock',  
+                text: 'Click to stop the alarm clock',  
+                at: new Date(now+d2),  
+                badge: 2  
+              });
+
+              });
+            	document.getElementById("ble").addEventListener("click", wakeup);	
+            } 
+
+
+
+            var myMedia = null;
+            var myVar;
+            var options = {
+              date: new Date(),
+              mode: 'time',
+              okText:'Ok',
+              cancelText:'Cancel',
+              is24Hour:true,
+              androidTheme:'THEME_HOLD_DARK'
+            };
+ 			  
+            function playAudio() {
+              var src = "/android_asset/www/audio/Daniel Powter - Bad Day.mp3";
+              if(myMedia === null) {
+                myMedia = new Media(src, onSuccess, onError);
+              function onSuccess() {
+                console.log("playAudio Success");
+              }
+              function onError(error) {
+                console.log("playAudio Error: " + error.code);
+              }
+              }
+              myMedia.play();
+            }
+
+function wakeup(){
+      
+            //选择时间
+            datePicker.show(options, onSuccess, onError);
+            
+        function onSuccess(date) {
+
+              infoh.innerHTML = date.getHours();
+              if(date.getMinutes()<10){
+                infom.innerHTML = "0"+date.getMinutes();
+              }
+              else{
+                infom.innerHTML = date.getMinutes();
+              }
+            //本地存储
+            localStorage.setItem("Hour",infoh.innerHTML);
+            localStorage.setItem("Minute",infom.innerHTML);
+    
+            //计算延时时间
+            var date1=new Date();
+            var date2;
+
+            if(date.getTime()>date1.getTime()){
+                date2 = date.getTime()-date1.getTime();
+              //  alert(date2);
+            }
+            else{
+                date2 = (60-date1.getMinutes())*60000 + (23-date1.getHours())*60*60000 + date.getHours()*60*60000 + date.getMinutes()*60000;
+              //  alert(date2);
+            }
+            //播放音乐并本地通知
+            clearTimeout(myVar);
+            myVar=setTimeout(playAudio,date2);
+            cordova.plugins.notification.local.schedule({  
+              id: 1,  
+              title: 'Alarm clock',  
+              text: 'Click to stop the alarm clock',  
+              at: date.getTime(),  
+              badge: 2  
+            });
+        } 
+
+    function onError(error) { // Android only
+      
+    }
+
+//蓝牙部分
+	 evothings.ble.startScan(
+    onDeviceFound,
+    onScanError);
+function onDeviceFound(device)
+{
+   console.log('Found device:' + JSON.stringify(device));
+   if (device.address == '00:0C:8A:F8:DD:91')
+    {
+        // Stop scanning.
+        evothings.ble.stopScan();
+
+        // Connect.
+        evothings.ble.connectToDevice(
+            device,
+            onConnected,
+            onDisconnected,
+            onConnectError);
+    }
+}
+function onConnected(device)
+{
+    console.log('Connected to device')
+/*
+    var LIGHT_CONFIG = 'f000aa72-0451-4000-b000-000000000000';
+    var configCharacteristic = evothings.ble.getCharacteristic(service,LGIHT_CONFIG);
+    evothings.ble.writeCharacteristic(
+      device,
+      configCharacteristic,
+      new Unit8Array([1]),
+      onLightActivated,
+      onLightActivatedError)
+    function onLightActivated(){
+      console.log(‘Light is ON’);
+    }
+    function onLightActivatedError(){
+      console.log(‘Light activate error:’ +error);
+    }
+
+*/
+}
+
+// Called if device disconnects.
+function onDisconnected(device)
+{
+    console.log('Disconnected from device')
+}
+
+// Called when a connect error occurs.
+function onConnectError(error)
+{
+    console.log('Connect error: ' + error)
+}
+
+function onScanError(error)
+{
+    console.log('Scan error: ' + error);
+}
+					
+}
+
+//停止音乐
+function stopAudio() {
+   if(myMedia) {
+      myMedia.stop(); 
+   }
+	
+   myMedia = null;
+}
+
+		</script>		
+	</head>
+	<body onload="onBodyLoad()">
+		<header class="mui-bar mui-bar-nav">
+			<a class="mui-action-back mui-icon mui-icon-left-nav mui-pull-left"></a>
+			<h1 class="mui-title">Wakeup Template</h1>
+		</header>
+		<div class="mui-content" style="height:580px">
+			<div class="mui-content-padded">
+			<p>Devices</p>
+		  	<ul class="mui-table-view">
+				<li class="mui-table-view-cell mui-media" style="height:100px">
+					<img class="mui-media-object mui-pull-left" src="images/audio.png" style="margin-top:20px">
+					<h4 style="margin-top:35px;float:left">Audio</h4>
+					<h4 id="s1" style="float:left;margin-top:35px;margin-left:120px;color:green"></h4>
+				</li>
+				<li class="mui-table-view-cell mui-media" style="height:100px">
+					<img class="mui-media-object mui-pull-left" src="images/curtain.png" style="margin-top:20px">
+					<h4 style="margin-top:35px;float:left">Curtain</h4>
+					<h4 id="s2" style="float:left;margin-top:35px;margin-left:105px;color:green"></h4>
+				</li>
+				<li class="mui-table-view-cell mui-media" style="height:100px">
+					<img class="mui-media-object mui-pull-left" src="images/socket.png" style="margin-top:20px">
+					<h4 style="margin-top:35px;float:left">Socket</h4>
+					<h4 id="s3" style="float:left;margin-top:35px;margin-left:110px;color:green"></h4>
+				</li>
+			</ul>
+      <h4 style="margin-top:30px;margin-left:80px;margin-right:10px;float:left">Wake me up at: </h4>
+			<h4 id="infoh" style="margin:30px 0;float:left"></h4>
+      <h4 style="margin:30px 0;float:left">:</h4>
+      <h4 id="infom" style="margin:30px 0;float:left"></h4>
+			<button id="ble" style="position:fixed;width:90%;top:500px;right:5%" class="btn btn-success">Start</button>
+			</div>
+		</div>
+	</body>
+</html>

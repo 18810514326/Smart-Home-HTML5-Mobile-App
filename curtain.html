@@ -1,0 +1,85 @@
+<!DOCTYPE html>
+<html>
+	<head>
+		<meta charset="UTF-8">
+		<meta name="viewport" content="width=device-width,initial-scale=1,minimum-scale=1,maximum-scale=1,user-scalable=no" />
+		<title></title>
+		<link rel="stylesheet" href="./css/bootstrap.min.css">
+		<link rel="stylesheet" href="http://code.jquery.com/ui/1.10.4/themes/smoothness/jquery-ui.css">
+		<link rel="stylesheet" href="http://jqueryui.com/resources/demos/style.css">
+		<link rel="stylesheet" href="./css/mui.min.css">
+		<script src="./js/jquery-3.2.1.min.js"></script>
+        <script src="http://code.jquery.com/ui/1.10.4/jquery-ui.js"></script>
+        <script src="./js/mui.min.js"></script>
+		<style>
+			body{
+				background-color: #28bdc2;
+				color:#FFFFFF;
+			}
+			p{
+				color:#FFFFFF;
+			}
+		</style>
+		
+		<script>
+  			$(function() {
+   			$( "#slider" ).slider({
+   					value:0,
+   					min:0,
+   					max:100,
+   					step:25,
+   					slide: function( event,ui ) {
+        				var v=ui.value; 
+						switch(v){
+							case 0:
+								document.getElementById("curtainx").src = "images/curtain0.png";
+								break;
+							case 25:
+								document.getElementById("curtainx").src = "images/curtain25.png";
+								break;
+							case 50:
+								document.getElementById("curtainx").src = "images/curtain50.png";
+								break;
+							case 75:
+								document.getElementById("curtainx").src = "images/curtain75.png";
+								break;
+							case 100:
+								document.getElementById("curtainx").src = "images/curtain100.png";
+								break;
+						}
+      				}
+    		});
+   		});
+		</script>
+</head>
+	
+<body>
+<!--
+	作者：807632219@qq.com
+	时间：2017-04-17
+	描述：顶部菜单栏
+-->	
+<header class="mui-bar mui-bar-nav">
+	<a class="mui-action-back mui-icon mui-icon-left-nav mui-pull-left"></a>
+	<h1 class="mui-title">Curtain</h1>
+</header>
+<!--
+	作者：807632219@qq.com
+	时间：2017-04-17
+	描述：主体
+-->
+
+<div style="width:50%;position:relative;top:100px;left:25%">
+	<img id="curtainx" src="images/curtain0.png" style="width:100%">
+</div>
+<div style="position:relative;top:150px;">
+	<p style="text-align:center;">Setting</p>
+	<div id="slider" style="width:300px;margin:0 auto"></div>
+	<label style="padding: 17px;">close</label>
+	<label style="padding: 17px;">25%</label>
+	<label style="padding: 17px;">half</label>
+	<label style="padding: 17px;">75%</label>
+	<label style="padding: 17px;">open</label>
+</div>
+</body>
+</html>

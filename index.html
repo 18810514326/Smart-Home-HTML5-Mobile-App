@@ -1,0 +1,118 @@
+<!DOCTYPE html>
+<html>
+
+	<head>
+		<meta charset="utf-8">
+		<meta name="viewport" content="width=device-width,initial-scale=1,minimum-scale=1,maximum-scale=1,user-scalable=no" />
+		<title></title>
+		<link href="css/mui.min.css" rel="stylesheet" />
+		<link rel="stylesheet" href="./css/bootstrap.min.css">
+		
+		<script src="./js/jquery-3.2.1.min.js"></script>
+		<script src="./js/bootstrap.min.js"></script>
+		<script src="./js/mui.min.js"></script>
+    <script src="cordova.js" type="text/javascript"></script>
+        <script>
+            function onBodyLoad() {
+                document.addEventListener("deviceready", onDeviceReady, false);
+            }
+            function onDeviceReady() {
+            document.getElementById("openBrowser").addEventListener("click", openBrowser);
+
+            }
+
+            function openBrowser() {
+   var url = 'http://100.64.53.88:33334/';
+   var target = '_blank';
+   var options = "location=yes;zoom=no"
+   var ref = cordova.InAppBrowser.open(url, target, options);
+
+   ref.addEventListener('loadstart', loadstartCallback);
+   ref.addEventListener('loadstop', loadstopCallback);
+   ref.addEventListener('loadloaderror', loaderrorCallback);
+   ref.addEventListener('exit', exitCallback);
+
+   function loadstartCallback(event) {
+      console.log('Loading started: '  + event.url)
+   }
+
+   function loadstopCallback(event) {
+      console.log('Loading finished: ' + event.url)
+   }
+
+   function loaderrorCallback(error) {
+      console.log('Loading error: ' + error.message)
+   }
+
+   function exitCallback() {
+      console.log('Browser is closed...')
+   }
+}
+        </script>
+	</head>
+
+<body onload="onBodyLoad()">
+	
+	<!--
+	作者：807632219@qq.com
+	时间：2017-04-26
+	描述：顶部菜单栏
+-->
+
+<header class="mui-bar mui-bar-nav">
+	<h1 class="mui-title">Templates</h1>
+</header>
+
+<!--
+	作者：807632219@qq.com
+	时间：2017-04-26
+	描述：场景列表
+-->
+<div class="mui-content" style="height:580px">
+	<div class="mui-content-padded">
+
+    <ul class="mui-table-view">
+        <li id="openBrowser" class="mui-table-view-cell mui-media" style="height:200px">
+          <img src="images/AtHome.png" style="float:left;height:100px;width:100px;margin-top:40px">
+          <h4 style="margin-top:80px;margin-left:20px;float:left">Safety template</h4>
+          <p class="glyphicon glyphicon-chevron-right" style="margin-top:82px;margin-left:33px"></p>
+        </li>
+        <a href="scene-getup.html">
+        <li class="mui-table-view-cell mui-media" style="height:200px">
+          <img src="images/WakeUp.png" style="float:left;height:100px;width:100px;margin-top:40px">
+          <h4 style="margin-top:80px;margin-left:20px;float:left;color:black">Wakeup template</h4>
+          <p class="glyphicon glyphicon-chevron-right" style="margin-top:82px;margin-left:20px"></p>
+        </li>
+        </a>
+    </ul>
+
+	</div>
+</div>
+
+<!--
+	作者：807632219@qq.com
+	时间：2017-04-26
+	描述：底部选项卡
+-->
+<nav class="navbar navbar-default navbar-fixed-bottom" role="navigation">
+    
+    <div style="width:33%;float:left">
+    	<a href=""> 
+    		<p style="text-align:center;margin-top:5px;color:#4b7ea9"><span class="mui-icon mui-icon-home"></span><br>Template</p>
+    	</a>
+    </div>
+    <div style="width:33%;float:left">
+    	<a href="equipment.html"> 
+    		<p style="text-align:center;margin-top:5px;"><span class="mui-icon mui-icon-gear"></span><br>Device</p>
+    	</a>
+    </div>
+    <div style="width:33%;float:left">
+    	<a href="setting.html"> 
+    		<p style="text-align:center;margin-top:5px"><span class="mui-icon mui-icon-contact"></span><br>Mine</p>
+    	</a>
+
+</nav>
+
+</body>
+
+</html>

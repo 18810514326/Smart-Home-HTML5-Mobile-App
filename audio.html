@@ -1,0 +1,143 @@
+<!DOCTYPE html>
+<html>
+
+	<head>
+		<meta charset="utf-8">
+		<title></title>
+		<meta name="viewport" content="width=device-width, initial-scale=1,maximum-scale=1,user-scalable=no">
+		<!--标准mui.css-->
+		<link rel="stylesheet" href="./css/mui.min.css">
+		<link rel="stylesheet" type="text/css" href="./css/icons-extra.css">
+		<link rel="stylesheet" href="./css/bootstrap.min.css">
+		<script src="./js/jquery-3.2.1.min.js"></script>
+		<script src="./js/mui.min.js"></script>
+		<script src="cordova.js" type="text/javascript"></script>
+		<script>
+            function onBodyLoad() {
+                document.addEventListener("deviceready", onDeviceReady, false);
+            }
+            function onDeviceReady() {
+            	document.getElementById("playbt").addEventListener("click", playAudio);
+				document.getElementById("pausebt").addEventListener("click", pauseAudio);
+				document.getElementById("stopbt").addEventListener("click", stopAudio);
+	
+            }
+
+            var myMedia = null;
+            var aa="Adam Lambert,Laleh - Welcome To The Show.mp3";
+            var src = "/android_asset/www/audio/"+aa;
+function playAudio() {
+
+   if(myMedia === null) {
+      myMedia = new Media(src, onSuccess, onError);
+
+      function onSuccess() {
+         console.log("playAudio Success");
+      }
+
+      function onError(error) {
+         console.log("playAudio Error: " + error.code);
+      }
+
+   }
+
+   myMedia.play();
+}
+
+function pauseAudio() {
+   if(myMedia) {
+      myMedia.pause();
+   }
+}
+
+function stopAudio() {
+   if(myMedia) {
+      myMedia.stop(); 
+   }
+	
+   myMedia = null;
+}
+
+        </script>
+	</head>
+
+	<body onload="onBodyLoad()">
+		<header class="mui-bar mui-bar-nav">
+		    <a class="mui-action-back mui-icon mui-icon-left-nav mui-pull-left"></a>
+		    <h1 class="mui-title">Audio</h1>
+		</header>
+		<div class="mui-content" style="height:580px">
+			<div class="mui-content-padded">
+		  		<p>Current music:</p>  
+				<h5 id="mname">Adam Lambert,Laleh - Welcome To The Show</h5>
+			
+				<button id="backbt" class="glyphicon glyphicon-step-backward"></button>
+				<button id="playbt" class="glyphicon glyphicon-play"></button>
+				<button id="pausebt" class="glyphicon glyphicon-pause"></button>
+				<button id="stopbt" class="glyphicon glyphicon-stop"></button>
+				<button id="forbt" class="glyphicon glyphicon-step-forward"></button>
+				
+				<p style="text-align:center;margin-top:20px">Music list</p>
+			<ol id="ol" class="mui-table-view">
+				 <li class="mui-table-view-cell">Adam Lambert,Laleh - Welcome To The Show</li>
+		         <li class="mui-table-view-cell">American Authors - Go Big or Go Home</li>
+		         <li class="mui-table-view-cell">Bon Jovi - It's My Life</li>
+		         <li class="mui-table-view-cell">Daniel Powter - Bad Day</li>
+		         <li class="mui-table-view-cell">Imagine Dragons - Radioactive</li>
+		         <li class="mui-table-view-cell">Sia - Unstoppable</li>
+		         <li class="mui-table-view-cell">Skylar Grey,Diddy-Dirty Money - Coming Home</li>
+		         <li class="mui-table-view-cell">The Fray - Never Say Never</li>
+			</ol>
+		</div>
+	</div>
+	
+	<script>
+		var j=0;
+		var ol = document.getElementById('ol');
+		var lis = ol.getElementsByTagName('li');
+	
+		$("#backbt").click(function(){
+			if(j>0){
+				j=j-1;
+			}
+			else if(j<=0){
+				j=7;
+			}
+			$("#mname").text(lis[j].innerHTML);
+			aa = lis[j].innerHTML+".mp3";
+			src = "/android_asset/www/audio/"+aa;
+			stopAudio();
+			playAudio();
+		});
+		$("#forbt").click(function(){
+			if(j<7){
+				j=j+1;
+			}
+			else if(j>=7){
+				j=0;
+			}
+			$("#mname").text(lis[j].innerHTML);
+			aa = lis[j].innerHTML+".mp3";
+			src = "/android_asset/www/audio/"+aa;
+			stopAudio();
+			playAudio();
+		});
+		
+		var musicplayer = function(i){
+            lis[i].onclick = function(){
+            	j=i;
+            	$("#mname").text(lis[i].innerHTML);
+            	aa = lis[i].innerHTML+".mp3";
+            	src = "/android_asset/www/audio/"+aa;
+            	stopAudio();
+            	playAudio();
+            }
+        }
+        for(var i=0;i<lis.length;i++){
+            musicplayer(i);
+        }
+	</script>
+	
+	</body>
+
+</html>
